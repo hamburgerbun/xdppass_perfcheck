@@ -108,6 +108,13 @@ ip netns exec $NETNS2 bash -c "ip link set $NS2_INSIDE_VETH xdp object $XDP_O_FI
 echo "testing with xdp in veths, both root ns and netns side"
 ip netns exec $NETNS1 iperf3 -c $NS2IP -p $IPERF3_PORT
 
-echo "tearing down"
-teardown 
-exit
+ip link set $BRNAME xdp object $XDP_O_FILE section $XDP_SECT
+echo "testing with xdp literally everywhere"
+ip netns exec $NETNS1 iperf3 -c $NS2IP -p $IPERF3_PORT
+
+if [ $1 = "noteardown" ]; then
+    echo "skipping teardown, everything will be left up. note that you should run teardown before you run this again"
+else
+    echo "tearing down"
+    teardown 
+fi
