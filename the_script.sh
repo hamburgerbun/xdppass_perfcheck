@@ -7,7 +7,6 @@ read -r -d '' PROGRAM_OUTPUT <<- EOF
 #include <linux/bpf.h>
 #include "bpf_helpers.h"
 SEC("xdp_pass")
-// trivial program to pass traffic. xdp for some reason needs a prog on the other side of the veth tunnels to do what we want. 
 int xdp_pass_func(struct xdp_md *ctx) {
     return XDP_PASS;
 }
